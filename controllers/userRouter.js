@@ -5,18 +5,11 @@ const config = require("../utils/config");
 
 const userRouter = require("express").Router();
 
-userRouter.get("/signup", async (req, res, next) => {
-  try {
-    const data = await User.find({});
-    res.status(200).json(data);
-  } catch (error) {
-    next(error);
-  }
-});
-
 userRouter.post("/signup", async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    if (!email || !password)
+      return res.status(400).json({ error: "Email or password is missing!!" });
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -42,9 +35,11 @@ userRouter.post("/signup", async (req, res, next) => {
 userRouter.post("/signin", async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    if (!email || !password)
+      return res.status(400).json({ error: "Email or password is missing!!" });
 
-    if (!email) {
+    const user = await User.findOne({ email });
+    if (!user) {
       return res.status(400).json({ error: "Email doesnot exists" });
     }
     const isCorrect = await bcrypt.compare(password, user.passwordHash);
