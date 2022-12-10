@@ -12,10 +12,10 @@ mongoose.connect(mongoUrl).then(() => {
   console.log("MongoDb connected");
 });
 
-app.get("/",async (req, res) => {
-    res.send("<h1>Welcome to Hospital Practitioner Management System</h1>");
-    });
+app.get("/", async (req, res) => {
+  res.send("<h1>Welcome to Hospital Practitioner Management System</h1>");
+});
 
-app.use("/api/users/signup", userRouter);
+app.use("/api/users", userRouter);
 
 module.exports = app;
